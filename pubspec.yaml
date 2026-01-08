@@ -17,13 +17,13 @@ dependencies:
 
   # Backend & Realtime
   supabase_flutter: ^2.8.3
-  livekit_client: ^2.6.0
+  livekit_client: ^2.2.6  # 🔥 Düşürüldü (flutter_webrtc uyumluluğu için)
   web_socket_channel: ^2.4.0
   webview_flutter: ^4.10.0
   youtube_player_flutter: ^9.0.1
   wakelock_plus: ^1.4.0
   audioplayers: ^6.0.0
-  flutter_webrtc: ^0.11.7  # 🔥 Pub.dev versiyonu (lokal path kaldırıldı)
+  flutter_webrtc: ^0.11.7
   
   http: ^1.2.2
 
