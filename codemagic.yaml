@@ -1,0 +1,44 @@
+workflows:
+  ios-unsigned-build:
+    name: iOS Unsigned Build (No Dev Account)
+    instance_type: mac_mini_m1
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+    scripts:
+      - name: Dependencies
+        script: |
+          flutter packages pub get
+          cd ios && pod install
+      
+      - name: Build Unsigned IPA
+        script: |
+          # 1. İmzasız (No-Codesign) iOS Build al
+          flutter build ios --release --no-codesign
+          
+          # 2. Build klasörüne git
+          cd build/ios/iphoneos
+          
+          # 3. Payload klasörü oluştur (Apple IPA standart yapısı)
+          mkdir Payload
+          
+          # 4. Uygulamayı (.app) Payload içine taşı
+          mv Runner.app Payload/
+          
+          # 5. Zipleyip .ipa uzantısına çevir
+          zip -r Runner.ipa Payload
+          
+          # 6. Çıktıyı Codemagic'in indirme klasörüne taşı
+          mv Runner.ipa $CM_EXPORT_DIR/Runner.ipa
+          
+    artifacts:
+      - "*.ipa"
